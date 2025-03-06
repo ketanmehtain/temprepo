@@ -20,16 +20,16 @@ resource "google_sql_database_instance" "this" {
     edition = "ENTERPRISE"
     ip_configuration {
       ipv4_enabled                                  = false
-      private_network                               = google_compute_network.vpc.self_link
+      private_network                               = google_compute_network.vpc.id
       enable_private_path_for_google_cloud_services = true
-      psc_config {
-        psc_enabled = true
-        allowed_consumer_projects = ["${var.project_id}"]
-      }
-      authorized_networks {
-        name = "vmmig_subnet"
-        value = google_compute_subnetwork.subnet.ip_cidr_range
-      }
+      # psc_config {
+      #   psc_enabled = true
+      #   allowed_consumer_projects = ["${var.project_id}"]
+      # }
+      # authorized_networks {
+      #   name = "vmmig_subnet"
+      #   value = google_compute_subnetwork.subnet.ip_cidr_range
+      # }
     }
 
     database_flags {

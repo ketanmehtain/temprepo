@@ -9,7 +9,7 @@ resource "google_compute_subnetwork" "subnet" {
   project       = var.project_id
   name          = "${var.name_prefix}-subnw"
   region        = "europe-west2"
-  ip_cidr_range = "11.0.2.0/24"
+  ip_cidr_range = "10.0.2.0/24"
   network       = google_compute_network.vpc.id
   depends_on = [google_compute_network.vpc]
 }
@@ -25,6 +25,18 @@ resource "google_compute_firewall" "allow-rdp" {
 
   source_ranges = ["0.0.0.0/0"]
   depends_on = [google_compute_network.vpc]
+}
+
+resource "google_compute_firewall" "allow_sql_access" {
+  name    = "allow-sql-access"
+  network = google_compute_network.vpc.id
+
+  allow {
+    protocol = "tcp"
+    ports    = ["5432"]
+  }
+
+  source_ranges = ["10.0.2.0/24"]
 }
 
 resource "google_compute_global_address" "private_vpc_ip" {
